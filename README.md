@@ -1,0 +1,2 @@
+# serverless-academy
+SLS Academy
