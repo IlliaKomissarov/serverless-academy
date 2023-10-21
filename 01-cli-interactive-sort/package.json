@@ -1,0 +1,12 @@
+{
+  "name": "01-cli-interactive-sort",
+  "version": "1.0.0",
+  "description": "SLS Academy",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "Illia Komissarov <iliakomissarow@gmail.com>",
+  "license": "ISC"
+}
