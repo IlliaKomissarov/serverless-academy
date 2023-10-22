@@ -1,0 +1,12 @@
+{
+  "name": "02_cli_primitive_db",
+  "version": "1.0.0",
+  "description": "Congratulations on completing the first task, where we did a very simple CLI application! Now we’re going to create more advanced app.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "Illia Komissarov <iliakomissarow@gmail.com>",
+  "license": "ISC"
+}
