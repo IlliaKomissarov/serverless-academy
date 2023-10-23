@@ -1,0 +1,6 @@
+{"name":"Illia","gender":"male","age":24}
+{"name":"Oggy","gender":"male","age":54}
+{"name":"Danna","gender":"female","age":23}
+{"name":"Olgerd","gender":"male","age":123}
+{"name":"123","gender":"female","age":null}
+
