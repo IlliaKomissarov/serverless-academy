@@ -1,6 +1,6 @@
 const TelegramBot = require("node-telegram-bot-api");
-const { getWeather } = require("./weatherFormatter");
 const { getForecast } = require("./weatherForecast");
+const { getWeatherMarkup } = require("./weatherFormatter");
 
 const TELEGRAM_BOT_TOKEN =
   process.env.TELEGRAM_BOT_TOKEN ||
@@ -13,26 +13,29 @@ bot.on("message", async (msg) => {
     chat: { id },
     text,
   } = msg;
-  const ternopilForecastText = "Forecast in Ternopil ⛈";
-  const forecastMenu = {
-    reply_markup: {
-      resize_keyboard: true,
-      one_time_keyboard: true,
-    },
-  };
 
   switch (text) {
     case "/start": {
-      forecastMenu.reply_markup.keyboard = [["Forecast in Ternopil"]];
-      await bot.sendMessage(id, ternopilForecastText, forecastMenu);
+      const menu = {
+        reply_markup: {
+          keyboard: [["Forecast in Ternopil"]],
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        },
+      };
+      await bot.sendMessage(id, "Forecast in Ternopil ⛈", menu);
       break;
     }
 
     case "Forecast in Ternopil": {
-      forecastMenu.reply_markup.keyboard = [
-        ["at intervals of 3 hours", "at intervals of 6 hours"],
-      ];
-      await bot.sendMessage(id, "Select the forecast interval 🌤", forecastMenu);
+      const subMenu = {
+        reply_markup: {
+          keyboard: [["at intervals of 3 hours", "at intervals of 6 hours"]],
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        },
+      };
+      await bot.sendMessage(id, "Select the forecast interval 🌤", subMenu);
       break;
     }
 
@@ -40,7 +43,7 @@ bot.on("message", async (msg) => {
     case "at intervals of 6 hours": {
       const interval = text.includes("3") ? 3 : 6;
       const forecast = await getForecast();
-      const weatherMarkup = getWeather(forecast, interval);
+      const weatherMarkup = getWeatherMarkup(forecast, interval);
       await bot.sendMessage(id, weatherMarkup, { parse_mode: "HTML" });
       break;
     }
