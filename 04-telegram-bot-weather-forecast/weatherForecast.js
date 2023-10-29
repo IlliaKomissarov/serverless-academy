@@ -1,7 +1,6 @@
 const axios = require("axios");
 
-const TOKEN =
-  process.env.WEATHER_API_TOKEN || "15c43b9af778f5a61f94739cd542693c";
+const TOKEN = process.env.WEATHER_API_TOKEN || "WEATHER_API_TOKEN";
 
 const weatherAPI = axios.create({
   baseURL: "https://api.openweathermap.org/data/2.5/forecast",
