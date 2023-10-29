@@ -1,4 +1,4 @@
-*4. TELEGRAM BOT: WEATHER FORECAST*
+# 4. TELEGRAM BOT: WEATHER FORECAST
 
 To run this project, you need to add the following environment variables to your .env file:
 
