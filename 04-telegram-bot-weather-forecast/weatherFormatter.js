@@ -4,7 +4,7 @@ const getWeatherMarkup = (data, interval = 3) => {
   const forecast =
     interval === 6 ? list.filter((el, idx) => idx % 2 === 0) : [...list];
 
-  let markup = `<b>⛈🌤☀️ Forecast for city: ${city.name}, ${city.country}</b>\n\n`;
+ let markup = `<b>☀️ Forecast for ${city.name}, ${city.country}</b>\n\n`;
 
   forecast
     .slice(0, 9)

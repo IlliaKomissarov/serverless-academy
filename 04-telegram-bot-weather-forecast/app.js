@@ -22,14 +22,14 @@ bot.on("message", async (msg) => {
           one_time_keyboard: true,
         },
       };
-      await bot.sendMessage(id, "Forecast in Ternopil ⛈", menu);
+      await bot.sendMessage(id, "Get the Ternopil Weather Forecast ⛈", menu);
       break;
     }
 
     case "Forecast in Ternopil": {
       const subMenu = {
         reply_markup: {
-          keyboard: [["at intervals of 3 hours", "at intervals of 6 hours"]],
+          keyboard: [["Every 3 hours", "Every 6 hours"]],
           resize_keyboard: true,
           one_time_keyboard: true,
         },
@@ -38,8 +38,8 @@ bot.on("message", async (msg) => {
       break;
     }
 
-    case "at intervals of 3 hours":
-    case "at intervals of 6 hours": {
+    case "Every 3 hours":
+    case "Every 6 hours": {
       const interval = text.includes("3") ? 3 : 6;
       const forecast = await getForecast();
       const weatherMarkup = getWeatherMarkup(forecast, interval);
@@ -48,7 +48,7 @@ bot.on("message", async (msg) => {
     }
 
     default:
-      await bot.sendMessage(id, "Try to select one of preset commands.");
+      await bot.sendMessage(id, "Please select one of the provided options.");
       break;
   }
 });
