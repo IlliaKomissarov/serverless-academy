@@ -1,4 +1,4 @@
-# 4. TELEGRAM BOT: WEATHER FORECAST
+# Telegram Exchange Rate Bot
 
 To run this project, you need to add the following environment variables to your .env file:
 
