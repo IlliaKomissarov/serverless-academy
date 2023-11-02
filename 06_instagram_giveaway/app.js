@@ -7,70 +7,58 @@ const getFilesList = async (dirPath) => {
   try {
     return await readdir(dirPath);
   } catch (error) {
-    console.log(error.message);
-    process.exit(0);
+    handleErrorMessage(error);
   }
 };
+
 const getFileData = async (filePath, fileName) => {
   try {
     const listPath = path.join(filePath, fileName);
     return await readFile(listPath, "utf8");
   } catch (error) {
-    console.log(error.message);
-    process.exit(0);
+    handleErrorMessage(error);
   }
+};
+
+const handleErrorMessage = (error) => {
+  console.log(error.message);
+  process.exit(0);
+};
+
+const processUserLists = async (dirPath, condition) => {
+  const startTime = performance.now();
+  const allUsers = {};
+
+  const usersLists = await getFilesList(dirPath);
+
+  for (const userList of usersLists) {
+    const data = await getFileData(dirPath, userList);
+    const users = data.split("\n");
+    const uniqueUsers = [...new Set(users)];
+
+    for (const user of uniqueUsers) {
+      allUsers[user] = allUsers[user] ? allUsers[user] + 1 : 1;
+    }
+  }
+
+  const countUsers = Object.values(allUsers).filter((user) =>
+    condition(user, usersLists.length)
+  ).length;
+
+  const endTime = performance.now();
+  return `Users: ${countUsers}. Time of execution: ${(
+    endTime - startTime
+  ).toFixed(3)}ms`;
 };
 
 const existInAtleastTen = async (dirPath) => {
-  const startTime = performance.now();
-  const allUsers = {};
-
-  const usersLists = await getFilesList(dirPath);
-
-  for (const userList of usersLists) {
-    const data = await getFileData(dirPath, userList);
-    const users = data.split("\n");
-    const uniqueUsers = [...new Set(users)];
-
-    for (const user of uniqueUsers) {
-      allUsers[user] = allUsers[user] ? allUsers[user] + 1 : 1;
-    }
-  }
-
-  const countUsers = Object.values(allUsers).filter((user) => {
-    return user >= 10;
-  }).length;
-
-  const endTime = performance.now();
-  return `Users exist in at least ten lists: ${countUsers}. Time of the execution: ${(
-    endTime - startTime
-  ).toFixed(3)}ms'`;
+  const condition = (user, listLength) => user >= 10;
+  return processUserLists(dirPath, condition);
 };
 
 const existInAllFiles = async (dirPath) => {
-  const startTime = performance.now();
-  const allUsers = {};
-
-  const usersLists = await getFilesList(dirPath);
-
-  for (const userList of usersLists) {
-    const data = await getFileData(dirPath, userList);
-    const users = data.split("\n");
-    const uniqueUsers = [...new Set(users)];
-
-    for (const user of uniqueUsers) {
-      allUsers[user] = allUsers[user] ? allUsers[user] + 1 : 1;
-    }
-  }
-
-  const countUsers = Object.values(allUsers).filter((user) => {
-    return user === usersLists.length;
-  }).length;
-
-  const endTime = performance.now();
-  return `Users exist in all lists: ${countUsers}. Time of the execution: ${(
-    endTime - startTime
-  ).toFixed(3)}ms'`;
+  const condition = (user, listLength) => user === listLength;
+  return processUserLists(dirPath, condition);
 };
 
 const uniqueValues = async (dirPath) => {
@@ -88,9 +76,9 @@ const uniqueValues = async (dirPath) => {
   const uniqueUsers = [...new Set(allUsers)];
   const endTime = performance.now();
 
-  return `Unique users: ${uniqueUsers.length}. Time of the execution: ${(
+  return `Unique users: ${uniqueUsers.length}. Time of execution: ${(
     endTime - startTime
-  ).toFixed(3)}ms'`;
+  ).toFixed(3)}ms`;
 };
 
 const getResults = async () => {
@@ -104,9 +92,8 @@ const getResults = async () => {
     const usersInTenFiles = await existInAtleastTen(DIR_PATH);
     console.log(usersInTenFiles);
   } catch (error) {
-    console.log(error.message);
+    handleErrorMessage(error);
   }
-  return;
 };
 
 getResults();
