@@ -8,37 +8,37 @@ const getUserData = async () => {
     const data = await readFile(dataPath, "utf8");
     return data ? JSON.parse(data) : [];
   } catch (error) {
-    console.log(error.message);
-    process.exit(0);
+    console.error(error.message);
+    process.exit(1);
   }
 };
 
 const transformUserData = (data) => {
-  const newData = [];
+  const newData = data.reduce((acc, { user, startDate, endDate }) => {
+    const existingUser = acc.find((el) => el.userId === user._id);
 
-  for (const { user, startDate, endDate } of data) {
-    const idx = newData.findIndex((el) => {
-      return el.userId === user._id;
-    });
-
-    if (!!~idx) {
-      newData[idx].vacations = [
-        ...newData[idx].vacations,
-        { startDate, endDate },
-      ];
+    if (existingUser) {
+      existingUser.vacations.push({ startDate, endDate });
     } else {
-      newData.push({
+      acc.push({
         userId: user._id,
         userName: user.name,
         vacations: [{ startDate, endDate }],
       });
     }
-  }
+
+    return acc;
+  }, []);
 
   return newData;
 };
 
-getUserData().then((res) => {
-  const newResponce = transformUserData(res);
-  console.log(newResponce);
-});
+(async () => {
+  try {
+    const userData = await getUserData();
+    const transformedData = transformUserData(userData);
+    console.log(transformedData);
+  } catch (error) {
+    console.error(error.message);
+  }
+})();
